@@ -14,9 +14,6 @@ app.use('/', express.static('static'));
 FileUploadController(app);
 FileDownloadController(app);
 
-// app.listen(app.get('port'), () => {
-//   console.log('Node app is running on port', app.get('port'));
-// });
-
-// Export your Express configuration so that it can be consumed by the Lambda handler
-module.exports = app
+app.listen(app.get('port'), () => {
+  console.log('Node app is running on port', app.get('port'));
+});
