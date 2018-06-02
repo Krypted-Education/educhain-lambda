@@ -9,11 +9,11 @@ Parameters:
     Description: AWS CodeStar projectID used to associate new resources to team members
     
 Resources:
-  HelloWorld:
+  UniChainLambda:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
-      Runtime: nodejs6.10
+      Runtime: nodejs8.10
       Environment:
         Variables:
           NODE_ENV: production
