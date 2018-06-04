@@ -2,7 +2,7 @@
 
 # Educhain FileUpload/Download Function
 
-This application is intent to be used only for upload/download certificates.
+This application is intended to be used only for upload/download certificates.
 
 # How to Run
 

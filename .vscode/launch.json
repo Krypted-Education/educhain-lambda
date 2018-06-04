@@ -12,6 +12,13 @@
       "env": {
         "DEBUG": "TRUE"
       }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Test",
+      "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+      "args": ["tests"]
     }
   ]
 }
