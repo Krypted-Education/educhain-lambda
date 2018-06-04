@@ -1,3 +1,5 @@
+![Build Status](https://codebuild.eu-west-2.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoidHFjYU12ZThwM01SZkZhMklwQmdwUWhwUDlMeDBGWENRUDVXWlRNQndnYS9HSmNOWnZibDZuc29QRUtaVTNDQmQxaDZVRmJnSzlLeHlMVWRWR1FHSWZ3PSIsIml2UGFyYW1ldGVyU3BlYyI6InViUUJVYmUxM21sWCtHbXMiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)
+
 # Educhain FileUpload/Download Function
 
 This application is intent to be used only for upload/download certificates.
