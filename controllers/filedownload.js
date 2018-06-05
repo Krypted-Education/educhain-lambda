@@ -26,11 +26,7 @@ const checkEthereumSignature = (certificate) => new Promise((resolve, reject) =>
 module.exports = app => {
 
   app.get('/', (req, res) => {
-    return res.status(400).json({ error: 'Invalid request. Needs hash to be defined.' });
-  });
-
-  app.get('/:hash', (req, res) => {
-    const hash = req.params.hash;
+    const hash = req.query.hash;
     if (!hash || hash.length < 1) {
       return res.status(400).json({ error: 'Invalid request. Needs hash to be defined.' });
     }
