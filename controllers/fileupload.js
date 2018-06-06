@@ -1,25 +1,28 @@
-const { uploadToSwarm } = require('../services/swarm-service'), { sign } = require('../services/signature-service');
+class FileUploadController {
+  constructor(swarmService, signatureService) {
+    this.swarmService = swarmService;
+    this.signatureService = signatureService;
+  }
 
-module.exports = app => {
-  app.post('/', (req, res, next) => {
+  downloadFile(model, response) {
     const digitalProfile = {
       version: '0.1',
       profile: {
-        name: req.body.name,
-        surname: req.body.lastname,
-        issuer: req.body.issuer,
-        issuerSignature: req.body.issuerSignature,
-        date: req.body.date,
-        items: req.body.items,
-        grade: req.body.grade,
-        studentNumber: req.body.studentNumber,
-        universityName: req.body.universityName,
-        issuerAuthority: req.body.issuerAuthority
+        name: model.name,
+        surname: model.lastname,
+        issuer: model.issuer,
+        issuerSignature: model.issuerSignature,
+        date: model.date,
+        items: model.items,
+        grade: model.grade,
+        studentNumber: model.studentNumber,
+        universityName: model.universityName,
+        issuerAuthority: model.issuerAuthority
       },
       kryptedSignature: ''
     };
 
-    digitalProfile.kryptedSignature = sign(digitalProfile);
+    digitalProfile.kryptedSignature = this.signatureService.sign(digitalProfile);
 
     const dir = {
       '/digitalProfile.ked': {
@@ -27,12 +30,20 @@ module.exports = app => {
         data: JSON.stringify(digitalProfile)
       }
     };
-    uploadToSwarm(dir)
+    this.swarmService.uploadToSwarm(dir)
       .then(result => {
-        return res.status(200).json({ uploadedFile: digitalProfile, hash: result });
+        return response.status(200).json({ uploadedFile: digitalProfile, hash: result });
       })
       .catch(err => {
-        return res.status(500).json({ error: err, file: digitalProfile });
+        return response.status(500).json({ error: err, file: digitalProfile });
       });
-  });
-};
+  }
+
+  registerRoute(app) {
+    app.post('/', (req, res, next) => {
+      return this.downloadFile(req.body, res);
+    });
+  }
+}
+
+module.exports = FileUploadController;

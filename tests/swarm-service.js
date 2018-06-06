@@ -15,7 +15,7 @@ describe('Swarm service', () => {
   // This should run before each of all the `it` statements.
   beforeEach(() => {
     // Setup a spy on mockedRequestPromise.
-    mockedRequestPromise = sinon.spy();
+    mockedRequestPromise = sinon.stub().resolves({ file: 'test' });
 
     // Setup the swarmservice instance to mock request-promise with a mocked
     // replacement.
