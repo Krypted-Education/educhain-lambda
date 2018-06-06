@@ -10,22 +10,57 @@ chai.use(chaiAsPromised);
 chai.use(sinonChai);
 
 describe('FileDownload Controller', () => {
-  let swarmService, signatureService, controller;
+  let swarmService, signatureService, controller, responseSpy, responseJson;
 
   beforeEach(() => {
+    const mockedCert = {
+      '/digitalProfile.ked': {
+        data: '{"profile": "squirtle"}'
+      }
+    };
     swarmService = {
-      downloadFromSwarm: sinon.stub()
+      downloadFromSwarm: sinon.stub().resolves(mockedCert)
     };
 
     signatureService = {
-      validateEthereumSignature: sinon.stub(),
-      validateKryptedSignature: sinon.stub()
+      validateKryptedSignature: sinon.stub().resolves({ profile: 'squirtle' }),
+      validateEthereumSignature: sinon.stub().resolves({ profile: 'squirtle' })
     };
 
-    controller = new FileDownloadController();
+    responseJson = sinon.stub();
+    responseMock = {
+      status: sinon.stub().returns({
+        json: responseJson
+      })
+    };
+
+    controller = new FileDownloadController(swarmService, signatureService);
   });
 
-  it('should response back 400 if the hash is not present', () => {
+  describe('download file action', () => {
+    it('should response back 400 if the hash is not present', (done) => {
+      // Act
+      controller.downloadFile(undefined, responseMock);
 
+      // Assert
+      responseMock.status.calledWith(400);
+      responseJson.calledWith({ error: 'Invalid request. Needs hash to be defined.' });
+      done();
+    });
+
+    it('should try downloading and check the signatures when hash is present', (done) => {
+      // Act
+      controller.downloadFile('Pikachu', responseMock);
+
+      // Assert
+      swarmService.downloadFromSwarm.calledWith('Pikachu');
+
+      signatureService.validateKryptedSignature.calledWith({ profile: 'squirtle' });
+      signatureService.validateEthereumSignature.calledWith({ profile: 'squirtle' });
+
+      responseMock.status.calledWith(200);
+      responseJson.calledWith('squirtle');
+      done();
+    });
   });
 });
