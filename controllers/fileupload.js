@@ -4,7 +4,7 @@ class FileUploadController {
     this.signatureService = signatureService;
   }
 
-  downloadFile(model, response) {
+  uploadFile(model, response) {
     const digitalProfile = {
       version: '0.1',
       profile: {
@@ -41,7 +41,7 @@ class FileUploadController {
 
   registerRoute(app) {
     app.post('/', (req, res, next) => {
-      return this.downloadFile(req.body, res);
+      return this.uploadFile(req.body, res);
     });
   }
 }
