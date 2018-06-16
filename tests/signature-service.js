@@ -23,6 +23,8 @@ describe('Signature service', () => {
     signatureService = {
       validateKryptedSignature : sinon.stub().returns('squirtle'),
       sign: sinon.stub().returns('squirtle'),
+      validateEthereumSignature : sinon.stub().returns(''),
+      signatureMessage : sinon.stub().returns('I, Krypted, signing this diploma as the issuer')
     };
 
     responseJson = sinon.stub();
@@ -60,11 +62,11 @@ describe('Signature service', () => {
       //Assert
       signatureService.sign.calledWith('Pikachu') ;
       assert.equal(result,'squirtle');
-      const digitalPorfileStub = {
+      const modelStub = {
         kryptedSignature: ''
       };
-      signatureService.sign.calledWith(digitalPorfileStub);
-      digitalPorfileStub.kryptedSignature = 'squirtle';
+      signatureService.sign.calledWith(modelStub);
+      modelStub.kryptedSignature = 'squirtle';
       responseJson.calledWith('squirtle')
       done();
      });
@@ -78,4 +80,18 @@ describe('Signature service', () => {
      responseJson.calledWith({ error: 'undefined krypted signature' });
      done();
     });
+  describe('Ethereum signature controll', () => {
+    it('should singature message issureAuthority equal object issuerAuthority', () => {
+     //Act
+      const result = signatureService.validateEthereumSignature('squirtle','0x58','Pikachu');
+      
+     //Assert 
+      const modelStub = {
+        profile : {
+        issuerAuthority : 'Krypted'
+        }
+      };
+      assert.equal(`I, ${modelStub.profile.issuerAuthority}, signing this diploma as the issuer`, signatureService.signatureMessage());
+    });
   });
+ });
